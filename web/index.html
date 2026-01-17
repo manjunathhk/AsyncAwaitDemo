@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async/Await Demo - Test Results Dashboard</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Async/Await Performance Dashboard</h1>
+            <p class="subtitle">Real-time comparison of async vs sync/blocking implementations</p>
+        </header>
+
+        <div class="controls">
+            <div class="api-selector">
+                <h3>Select API to Test</h3>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="api" value="csharp" checked>
+                        C# API (localhost:5000)
+                    </label>
+                    <label>
+                        <input type="radio" name="api" value="node">
+                        Node.js API (localhost:3000)
+                    </label>
+                </div>
+            </div>
+
+            <div class="test-controls">
+                <h3>Run Load Tests</h3>
+                <div class="button-group">
+                    <button id="testAsync" class="btn btn-primary">Test Async Endpoints</button>
+                    <button id="testSync" class="btn btn-warning">Test Sync/Blocking Endpoints</button>
+                    <button id="testBoth" class="btn btn-success">Test Both</button>
+                    <button id="resetMetrics" class="btn btn-secondary">Reset Metrics</button>
+                </div>
+                <div class="test-config">
+                    <label>
+                        Concurrent Requests:
+                        <input type="number" id="concurrentRequests" value="50" min="1" max="200">
+                    </label>
+                    <label>
+                        Total Requests:
+                        <input type="number" id="totalRequests" value="100" min="10" max="1000">
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="status" id="status">
+            <p>Ready to run tests. Select an API and click a test button.</p>
+        </div>
+
+        <div class="results-container">
+            <div class="result-section">
+                <h2>Async Endpoints Performance</h2>
+                <div id="asyncResults" class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Throughput</div>
+                        <div class="metric-value" id="asyncThroughput">-</div>
+                        <div class="metric-unit">req/sec</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Avg Response Time</div>
+                        <div class="metric-value" id="asyncAvgTime">-</div>
+                        <div class="metric-unit">ms</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">P95 Response Time</div>
+                        <div class="metric-value" id="asyncP95">-</div>
+                        <div class="metric-unit">ms</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Success Rate</div>
+                        <div class="metric-value" id="asyncSuccessRate">-</div>
+                        <div class="metric-unit">%</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="asyncChart"></canvas>
+                </div>
+            </div>
+
+            <div class="result-section">
+                <h2>Sync/Blocking Endpoints Performance</h2>
+                <div id="syncResults" class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Throughput</div>
+                        <div class="metric-value" id="syncThroughput">-</div>
+                        <div class="metric-unit">req/sec</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Avg Response Time</div>
+                        <div class="metric-value" id="syncAvgTime">-</div>
+                        <div class="metric-unit">ms</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">P95 Response Time</div>
+                        <div class="metric-value" id="syncP95">-</div>
+                        <div class="metric-unit">ms</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Success Rate</div>
+                        <div class="metric-value" id="syncSuccessRate">-</div>
+                        <div class="metric-unit">%</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="syncChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="comparison-section">
+            <h2>Performance Comparison</h2>
+            <div id="comparison" class="comparison-grid">
+                <div class="comparison-card">
+                    <div class="comparison-metric">Throughput Improvement</div>
+                    <div class="comparison-value" id="throughputImprovement">-</div>
+                </div>
+                <div class="comparison-card">
+                    <div class="comparison-metric">Response Time Improvement</div>
+                    <div class="comparison-value" id="timeImprovement">-</div>
+                </div>
+                <div class="comparison-card">
+                    <div class="comparison-metric">Winner</div>
+                    <div class="comparison-value" id="winner">-</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="server-metrics">
+            <h2>Current Server Metrics</h2>
+            <div id="serverMetrics" class="server-metrics-grid">
+                <p>Click "Fetch Server Metrics" to view current API statistics</p>
+            </div>
+            <button id="fetchMetrics" class="btn btn-info">Fetch Server Metrics</button>
+        </div>
+
+        <div class="documentation">
+            <h2>Understanding the Results</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>Throughput</h3>
+                    <p>Number of requests processed per second. Higher is better. Async should show 5-10x improvement in C# and 20-30x in Node.js.</p>
+                </div>
+                <div class="info-card">
+                    <h3>Response Time</h3>
+                    <p>Time taken to complete a request. Lower is better. Async shows improvements under concurrent load.</p>
+                </div>
+                <div class="info-card">
+                    <h3>P95 Response Time</h3>
+                    <p>95th percentile response time - 95% of requests complete faster than this. Shows tail latency performance.</p>
+                </div>
+                <div class="info-card">
+                    <h3>Why Async Wins</h3>
+                    <p>Async releases threads (C#) or the event loop (Node.js) during I/O operations, allowing concurrent request processing.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

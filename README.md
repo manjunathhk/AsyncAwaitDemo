@@ -21,7 +21,7 @@ This repository contains **practical, runnable demonstrations** that prove why a
 
 ```
 AsyncAwaitDemo/
-├── CSharpDemo/              # C# ASP.NET Core demonstration
+├── CSharpDemo/              # C# ASP.NET Core demonstration (.NET 10, C# 14)
 │   ├── AsyncAwaitWebApi/    # Web API project
 │   │   ├── Controllers/     # Async vs Sync controllers
 │   │   ├── Services/        # Simulated I/O operations
@@ -30,13 +30,25 @@ AsyncAwaitDemo/
 │       ├── load-test.sh     # Bash-based load test
 │       └── load-test.py     # Python-based load test (recommended)
 │
-├── NodeDemo/                # Node.js + TypeScript demonstration
+├── NodeDemo/                # Node.js + TypeScript demonstration (Node 22 LTS)
 │   ├── src/
 │   │   ├── controllers/     # Async vs Blocking controllers
 │   │   ├── services/        # Simulated I/O operations
 │   │   └── index.ts
 │   └── loadTests/
 │       └── load-test.js     # Node.js load test
+│
+├── web/                     # Interactive Web Dashboard (Azure Static Web Apps)
+│   ├── index.html          # Performance testing UI
+│   ├── assets/
+│   │   ├── css/            # Styles
+│   │   └── js/             # Test runner logic
+│   ├── staticwebapp.config.json  # Azure configuration
+│   └── README.md           # Web dashboard documentation
+│
+├── .github/
+│   └── workflows/
+│       └── azure-static-web-apps.yml  # CI/CD for Azure deployment
 │
 └── README.md               # This file
 ```
@@ -47,9 +59,11 @@ AsyncAwaitDemo/
 
 ### Prerequisites
 
-- **C# Demo**: .NET 8.0 SDK or higher
-- **Node.js Demo**: Node.js 18+ and npm
+- **C# Demo**: .NET 10.0 SDK (with C# 14 support)
+- **Node.js Demo**: Node.js 22+ LTS and npm
+- **Web Dashboard**: Any modern web browser
 - **Load Testing**: Python 3 (for advanced C# tests) or Node.js
+- **Azure Deployment** (Optional): Azure account and Azure CLI
 
 ---
 
@@ -205,6 +219,76 @@ BLOCKING - Get Users:
 
 In Node.js, blocking the event loop = DISASTER
 ```
+
+---
+
+## Part 3: Interactive Web Dashboard
+
+### What It Provides
+
+- **Visual Performance Testing**: Run load tests directly from your browser
+- **Real-time Metrics**: See throughput, response times, and success rates
+- **Side-by-side Comparison**: Compare async vs sync/blocking implementations
+- **Multi-API Support**: Test both C# and Node.js APIs from one interface
+- **Azure Deployment**: Host the dashboard as a static website on Azure
+
+### Running the Web Dashboard Locally
+
+```bash
+# Start one or both API servers first
+# C# API (Terminal 1):
+cd CSharpDemo/AsyncAwaitWebApi
+dotnet run  # Runs on http://localhost:5000
+
+# Node.js API (Terminal 2):
+cd NodeDemo
+npm install
+npm run dev  # Runs on http://localhost:3000
+
+# Serve the web dashboard (Terminal 3):
+cd web
+python3 -m http.server 8080
+# Open http://localhost:8080 in your browser
+```
+
+### Using the Dashboard
+
+1. **Select API**: Choose between C# or Node.js
+2. **Configure Test**: Set concurrent requests (e.g., 50) and total requests (e.g., 100)
+3. **Run Tests**:
+   - Test Async Endpoints only
+   - Test Sync/Blocking Endpoints only
+   - Test Both for side-by-side comparison
+4. **View Results**: See throughput, response times, P95 latencies, and success rates
+5. **Fetch Server Metrics**: View detailed metrics from the running API
+
+### Deploying to Azure Static Web Apps
+
+The repository includes automated deployment via GitHub Actions:
+
+**Quick Deploy:**
+1. Fork this repository
+2. Create an Azure Static Web App in the [Azure Portal](https://portal.azure.com)
+3. Connect it to your GitHub repository
+4. Set app location to `/web`
+5. Deploy automatically on every push
+
+**Manual Setup:**
+```bash
+# Install Azure CLI
+az login
+
+# Create static web app
+az staticwebapp create \
+  --name async-await-demo \
+  --resource-group YourResourceGroup \
+  --source https://github.com/YOUR_USERNAME/AsyncAwaitDemo \
+  --location eastus \
+  --branch main \
+  --app-location "/web"
+```
+
+See [web/README.md](web/README.md) for detailed deployment instructions.
 
 ---
 
@@ -400,7 +484,42 @@ The demonstrations in this repository prove these benefits with real, measurable
 1. ✅ Run both demos and observe the metrics
 2. ✅ Try the load tests to see the dramatic differences
 3. ✅ Review the code to understand the patterns
-4. ✅ Apply async/await to your own web APIs
+4. ✅ Use the web dashboard for visual performance testing
+5. ✅ Deploy to Azure Static Web Apps for easy sharing
+6. ✅ Apply async/await to your own web APIs
+
+---
+
+## Technology Stack
+
+### Updated Tech Stack (2026)
+
+**C# API:**
+- .NET 10.0 SDK
+- C# 14 language features
+- ASP.NET Core Web API
+- BenchmarkDotNet 0.14.0
+- Swagger/OpenAPI 10.0.0
+
+**Node.js API:**
+- Node.js 22 LTS (Long Term Support)
+- TypeScript 5.7+
+- Express.js 4.x
+- Modern ES modules
+
+**Web Dashboard:**
+- Vanilla JavaScript (ES6+)
+- HTML5 & CSS3
+- Responsive design
+- Azure Static Web Apps
+- GitHub Actions CI/CD
+
+**Benefits of Updated Stack:**
+- ✅ Latest performance optimizations
+- ✅ Enhanced security features
+- ✅ Long-term support and stability
+- ✅ Modern language features (C# 14)
+- ✅ Better tooling and developer experience
 
 ---
 
