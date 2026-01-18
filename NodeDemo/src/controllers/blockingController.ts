@@ -43,7 +43,7 @@ export class BlockingController {
      */
     getOrder(req: Request, res: Response): void {
         const start = Date.now();
-        const orderId = parseInt(req.params.id);
+        const orderId = parseInt(req.params.id as string);
 
         try {
             // BAD: Sequential blocking operations

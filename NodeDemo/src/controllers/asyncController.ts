@@ -41,7 +41,7 @@ export class AsyncController {
      */
     async getOrder(req: Request, res: Response): Promise<void> {
         const start = Date.now();
-        const orderId = parseInt(req.params.id);
+        const orderId = parseInt(req.params.id as string);
 
         try {
             // GOOD: Multiple I/O operations run in PARALLEL
