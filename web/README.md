@@ -36,24 +36,37 @@ npm run dev
 
 You can serve the static files using any web server. Here are a few options:
 
-**Option 1: Python HTTP Server**
+**Option 1: Python HTTP Server (Recommended - Auto Port Selection)**
 ```bash
 cd web
-python3 -m http.server 8080
-# Open http://localhost:8080 in your browser
+python serve.py
+# Automatically finds an available port and opens server
+# Look for the URL in the console output
 ```
 
-**Option 2: Node.js http-server**
+**Option 2: Python HTTP Server (Manual Port)**
+```bash
+cd web
+python -m http.server 8000
+# Open http://localhost:8000 in your browser
+# If port 8000 is in use, try: 8001, 8081, 3001, 5500, etc.
+```
+
+**Option 3: Node.js http-server**
 ```bash
 npm install -g http-server
 cd web
-http-server -p 8080
-# Open http://localhost:8080 in your browser
+http-server -p 8000
+# Open http://localhost:8000 in your browser
 ```
 
-**Option 3: VS Code Live Server**
+**Option 4: VS Code Live Server**
 - Install the "Live Server" extension in VS Code
 - Right-click on `index.html` and select "Open with Live Server"
+
+**Option 5: Just Open the HTML File**
+- You can also just double-click `index.html` to open in your browser
+- Note: Some features may not work due to CORS restrictions with file:// protocol
 
 ## Using the Dashboard
 

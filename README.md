@@ -247,8 +247,9 @@ npm run dev  # Runs on http://localhost:3000
 
 # Serve the web dashboard (Terminal 3):
 cd web
-python3 -m http.server 8080
-# Open http://localhost:8080 in your browser
+python serve.py
+# Automatically finds an available port (8000, 8081, etc.)
+# Or use: python -m http.server 8000
 ```
 
 ### Using the Dashboard
