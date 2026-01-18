@@ -11,6 +11,17 @@ builder.Services.AddSingleton<DatabaseService>();
 builder.Services.AddSingleton<ExternalApiService>();
 builder.Services.AddSingleton<MetricsService>();
 
+// Add CORS to allow web dashboard to access the API
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -19,6 +30,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Enable CORS
+app.UseCors("AllowAll");
 
 app.UseAuthorization();
 app.MapControllers();
@@ -39,14 +53,19 @@ app.MapPost("/metrics/reset", (MetricsService metricsService) =>
 Console.WriteLine("==============================================");
 Console.WriteLine("Async/Await Demo API Started");
 Console.WriteLine("==============================================");
+Console.WriteLine("API URL:    http://localhost:5000");
 Console.WriteLine("Swagger UI: http://localhost:5000/swagger");
-Console.WriteLine("Metrics: http://localhost:5000/metrics");
+Console.WriteLine("Metrics:    http://localhost:5000/metrics");
+Console.WriteLine();
+Console.WriteLine("CORS: Enabled (allows web dashboard access)");
 Console.WriteLine();
 Console.WriteLine("TEST ENDPOINTS:");
 Console.WriteLine("  Async:  GET /api/async/users");
 Console.WriteLine("  Sync:   GET /api/sync/users");
-Console.WriteLine("  Async:  GET /api/async/orders");
-Console.WriteLine("  Sync:   GET /api/sync/orders");
+Console.WriteLine("  Async:  GET /api/async/orders/{id}");
+Console.WriteLine("  Sync:   GET /api/sync/orders/{id}");
+Console.WriteLine("  Async:  GET /api/async/complex");
+Console.WriteLine("  Sync:   GET /api/sync/complex");
 Console.WriteLine("==============================================");
 
 app.Run("http://0.0.0.0:5000");

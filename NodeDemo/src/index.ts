@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import cors from 'cors';
 import { DatabaseService } from './services/databaseService';
 import { ExternalApiService } from './services/externalApiService';
 import { MetricsService } from './services/metricsService';
@@ -18,6 +19,7 @@ const asyncController = new AsyncController(dbService, apiService, metricsServic
 const blockingController = new BlockingController(dbService, apiService, metricsService);
 
 // Middleware
+app.use(cors()); // Enable CORS for all routes
 app.use(express.json());
 
 // Request logging middleware
@@ -105,11 +107,15 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log(`Health check: http://localhost:${PORT}/health`);
     console.log(`Metrics: http://localhost:${PORT}/metrics`);
     console.log('');
+    console.log('CORS: Enabled (allows web dashboard access)');
+    console.log('');
     console.log('TEST ENDPOINTS:');
     console.log('  Async:    GET /api/async/users');
     console.log('  Blocking: GET /api/blocking/users');
     console.log('  Async:    GET /api/async/orders/:id');
     console.log('  Blocking: GET /api/blocking/orders/:id');
+    console.log('  Async:    GET /api/async/complex');
+    console.log('  Blocking: GET /api/blocking/complex');
     console.log('');
     console.log('⚠️  WARNING: Blocking endpoints will freeze the server!');
     console.log('   Use them only for comparison during load testing.');
