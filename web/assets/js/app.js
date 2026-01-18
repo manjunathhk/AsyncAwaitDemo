@@ -87,6 +87,7 @@ async function makeRequest(url) {
 async function runConcurrentRequests(url, concurrent, total) {
     const results = [];
     const batches = Math.ceil(total / concurrent);
+    const testStartTime = performance.now();
 
     for (let batch = 0; batch < batches; batch++) {
         const batchSize = Math.min(concurrent, total - (batch * concurrent));
@@ -100,11 +101,14 @@ async function runConcurrentRequests(url, concurrent, total) {
         updateStatus(`Running test... ${progress}% complete (${results.length}/${total} requests)`, 'loading');
     }
 
-    return results;
+    const testEndTime = performance.now();
+    const totalElapsedTime = testEndTime - testStartTime;
+
+    return { results, totalElapsedTime };
 }
 
 // Calculate statistics
-function calculateStats(results) {
+function calculateStats(results, totalElapsedTime) {
     const successfulResults = results.filter(r => r.success);
     const durations = successfulResults.map(r => r.duration);
 
@@ -126,9 +130,8 @@ function calculateStats(results) {
     const p95Index = Math.floor(durations.length * 0.95);
     const p95Time = durations[p95Index] || durations[durations.length - 1];
 
-    // Calculate throughput (requests per second)
-    const maxTime = Math.max(...durations);
-    const throughput = (results.length / maxTime) * 1000;
+    // Calculate throughput (requests per second) based on total elapsed time
+    const throughput = (results.length / totalElapsedTime) * 1000;
 
     return {
         throughput: Math.round(throughput * 10) / 10,
@@ -196,16 +199,16 @@ async function runTest(mode) {
         if (mode === 'async' || mode === 'both') {
             updateStatus(`Testing async endpoints... (0/${total} requests)`, 'loading');
             const asyncUrl = config.baseUrl + config.asyncEndpoint;
-            const asyncResults = await runConcurrentRequests(asyncUrl, concurrent, total);
-            asyncStats = calculateStats(asyncResults);
+            const { results: asyncResults, totalElapsedTime: asyncElapsedTime } = await runConcurrentRequests(asyncUrl, concurrent, total);
+            asyncStats = calculateStats(asyncResults, asyncElapsedTime);
             updateMetricsDisplay(asyncStats, 'async');
         }
 
         if (mode === 'sync' || mode === 'both') {
             updateStatus(`Testing sync/blocking endpoints... (0/${total} requests)`, 'loading');
             const syncUrl = config.baseUrl + config.syncEndpoint;
-            const syncResults = await runConcurrentRequests(syncUrl, concurrent, total);
-            syncStats = calculateStats(syncResults);
+            const { results: syncResults, totalElapsedTime: syncElapsedTime } = await runConcurrentRequests(syncUrl, concurrent, total);
+            syncStats = calculateStats(syncResults, syncElapsedTime);
             updateMetricsDisplay(syncStats, 'sync');
         }
 
