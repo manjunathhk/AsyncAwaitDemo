@@ -21,7 +21,7 @@ This repository contains **practical, runnable demonstrations** that prove why a
 
 ```
 AsyncAwaitDemo/
-├── CSharpDemo/              # C# ASP.NET Core demonstration (.NET 9, C# 13)
+├── CSharpDemo/              # C# ASP.NET Core demonstration (.NET 10 LTS, C# 14)
 │   ├── AsyncAwaitWebApi/    # Web API project
 │   │   ├── Controllers/     # Async vs Sync controllers
 │   │   ├── Services/        # Simulated I/O operations
@@ -59,7 +59,7 @@ AsyncAwaitDemo/
 
 ### Prerequisites
 
-- **C# Demo**: .NET 9.0 SDK (with C# 13 support)
+- **C# Demo**: .NET 10.0 SDK (LTS with C# 14 support)
 - **Node.js Demo**: Node.js 22+ LTS and npm
 - **Web Dashboard**: Any modern web browser
 - **Load Testing**: Python 3 (for advanced C# tests) or Node.js
@@ -495,11 +495,11 @@ The demonstrations in this repository prove these benefits with real, measurable
 ### Updated Tech Stack (2026)
 
 **C# API:**
-- .NET 9.0 SDK (latest stable)
-- C# 13 language features
-- ASP.NET Core Web API
+- .NET 10.0 SDK (LTS - supported until Nov 2028)
+- C# 14 language features (extension members, Span<T> improvements)
+- ASP.NET Core Web API with OpenAPI 3.1 support
 - BenchmarkDotNet 0.14.0
-- Swashbuckle 6.9.0 / OpenAPI 9.0.0
+- Swashbuckle.AspNetCore 10.1.0 / Microsoft.AspNetCore.OpenApi 10.0.2
 
 **Node.js API:**
 - Node.js 22 LTS (Long Term Support)
@@ -515,11 +515,11 @@ The demonstrations in this repository prove these benefits with real, measurable
 - GitHub Actions CI/CD
 
 **Benefits of Updated Stack:**
-- ✅ Latest stable .NET version with performance optimizations
-- ✅ Enhanced security features
-- ✅ Long-term support and stability
-- ✅ Modern language features (C# 13)
-- ✅ Better tooling and developer experience
+- ✅ .NET 10 LTS with 3 years of support (Nov 2025 - Nov 2028)
+- ✅ C# 14 with extension members and improved Span<T> support
+- ✅ OpenAPI 3.1 document generation with YAML support
+- ✅ Latest performance and security optimizations
+- ✅ Modern language features and enhanced developer experience
 
 ---
 
